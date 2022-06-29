@@ -41,7 +41,7 @@ We want to:
 - Save the subscriptions to our system and update our database to send the correct data each time for the right subscriptions.
 - Create a way to unsubscribe as well
 
-We ought to do:
+We ought to:
 
 - Use FastAPI Websockets
 - Use PostgreSQL/MongoDB for persistent data.
