@@ -22,3 +22,29 @@ and print out every time the price goes above the input number.
 limitations, scalability and recoverability of the designed system.
 
 - Commit the above to a public github and provide the link.
+
+## Project
+
+### Assumptions
+
+We don't want to:
+
+- Store ALL the loaded information from Binance subscriptions on databases
+  - Millions of orders go through the Binance exchange every day.
+  - It would overload our database really fast.
+- Subscribe to ALL the Binance symbols at the same time because most of the symbols won't be needed.
+
+We want to:
+
+- Save/keep at max the last or last few orders from each symbol.
+- Dinamically subscribe/unsubscribe from Binance symbols.
+- Save the subscriptions to our system and update our database to send the correct data each time for the right subscriptions.
+- Create a way to unsubscribe as well
+
+We ought to do:
+
+- Use FastAPI Websockets
+- Use PostgreSQL/MongoDB for persistent data.
+- Maybe split into 2 different microservices:
+  - one for fetching
+  - one for exposing
