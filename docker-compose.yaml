@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=coinpanel
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+    ports:
+      - 5432:5432
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+    # Use this to not lose the data after a run
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    # Use this to lose the data after a run
+    # volumes:
+    #   - ./sql:/docker-entrypoint-initdb.d
+    # tmpfs:
+    #   - /var/lib/postgresql/data:rw,noexec,nosuid,size=500m
