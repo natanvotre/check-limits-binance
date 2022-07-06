@@ -4,14 +4,13 @@ import random
 import pytest
 import json
 import contextlib
+from threading import Thread
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-
-from threading import Thread
+from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from sql import database
-from sqlalchemy_utils import create_database, database_exists, drop_database
 from websocket import WebSocketApp
 from ingestion import Ingestion
 from logger.logger import logging

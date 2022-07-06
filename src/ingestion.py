@@ -1,12 +1,18 @@
-import json
 from os import environ
-from sqlalchemy import create_engine
+import json
+from pathlib import Path
+from threading import Timer
+
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker, Session
-from websocket import WebSocketApp
+
 from sql.data import (list_current_sub_symbols, list_current_subscriptions_from_symbol)
 from sql.models import Notification
-from threading import Timer
+from sql import database
+from websocket import WebSocketApp
 from logger.logger import logging
+
+root_path = Path(__file__).parent.parent
 
 
 class Ingestion:

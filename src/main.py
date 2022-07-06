@@ -1,17 +1,12 @@
 from os import environ
 import json
-import logging
-import sys
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi_utils.inferring_router import InferringRouter
-from fastapi_utils.cbv import cbv
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from sql.database import SessionLocal
 from sql.models import Subscription, Connection
 from sql.data import list_subscriptions_from_connection, list_notifications_from_subscription, HEARTBEAT_LIMIT
 from logger.logger import WsLogger

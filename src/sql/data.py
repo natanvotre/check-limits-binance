@@ -1,7 +1,7 @@
-
 from datetime import datetime, timedelta
 from typing import List
 from sqlalchemy.orm import Session
+
 from .models import Subscription, Notification
 
 HEARTBEAT_LIMIT = 60

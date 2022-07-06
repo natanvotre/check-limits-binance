@@ -33,7 +33,7 @@ services:
     environment:
       - BINANCE_WS_URI=wss://stream.binance.com:9443/ws
       - PSQL_CONN=postgresql://dbuser:dbpass@postgres:5432/coinpanel
-    command: ./run.sh ingestion
+    command: python3 src/ingestion.py
     healthcheck:
       test: [ "CMD-SHELL", "test -f /home/app/ready.txt" ]
       interval: 5s

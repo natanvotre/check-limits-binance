@@ -1,6 +1,4 @@
 import datetime
-from os import environ
-from typing import List
 from uuid import uuid4
 
 from sqlalchemy import (Column, String, DateTime, ForeignKey, Integer, Float)

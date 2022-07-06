@@ -1,13 +1,13 @@
-import logging
-import random
-import json
-
 # noinspection PyUnresolvedReferences
 import pytest
 # noinspection PyUnresolvedReferences
 from tests.base import db_session, setup_database, connection
 
 import time
+import logging
+import random
+import json
+
 from datetime import datetime
 from enums import Symbol
 from fastapi.testclient import TestClient
@@ -38,13 +38,7 @@ class TestIngestionFunctionally:
     #   - [DB]: test database
     #   - [Ingestion]: real data
 
-    def test_conn_created(self, db_session):
-        db_session.add(Connection())
-        db_session.commit()
-
-        assert len(db_session.query(Connection).all()) == 1
-
-    def test_ingestion_can_receive_trade_message(self):
+    def test_ingestion_can_receive_trade_message(self, db_session):
         """
             Test if ingestion can receive messages from Exchange
 
