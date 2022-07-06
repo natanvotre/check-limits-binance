@@ -54,13 +54,13 @@ services:
       - PSQL_CONN=postgresql://dbuser:dbpass@postgres:5432/coinpanel
 
 #---To test, run only `postgres` and `testing` services---#
-#   testing:
-#     build: .
-#     depends_on:
-#       postgres:
-#         condition: service_healthy
-#     environment:
-#       - BINANCE_WS_URI=wss://stream.binance.com:9443/ws
-#       - PSQL_CONN=postgresql://dbuser:dbpass@postgres:5432/coinpanel
-#       - TEST_DB_CONN=postgresql://dbuser:dbpass@postgres:5432/test_coinpanel
-#     command: pytest src/tests/tests.py
+  testing:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - BINANCE_WS_URI=wss://stream.binance.com:9443/ws
+      - PSQL_CONN=postgresql://dbuser:dbpass@postgres:5432/coinpanel
+      - TEST_DB_CONN=postgresql://dbuser:dbpass@postgres:5432/test_coinpanel
+    command: pytest src/tests/tests.py
