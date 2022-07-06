@@ -27,6 +27,12 @@ class Ingestion:
         self.symbol_subs = {'etcusdt'}
         self.last_id = 1
         self.previous_prices = {}
+        self.setup_database()
+
+    def setup_database(self):
+        if not inspect(self.engine).get_table_names(schema='public'):
+            database.Base.metadata.bind = self.engine
+            database.Base.metadata.create_all()
 
     def on_error(self, ws: WebSocketApp, error: Exception):
         logging.error(error)
@@ -133,6 +139,8 @@ class Ingestion:
             on_open=self.on_open,
             on_message=self.on_message,
         )
+        # tells to healthchecker that ingestion is ready
+        (root_path / 'ready.txt').touch()
 
         return ws.run_forever()
 

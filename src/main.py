@@ -58,7 +58,7 @@ class WsHandler():
         # Check if it is a json
         data = json.loads(data)
         # Only subscribes
-        # TODO: Handle multiple commands
+        # TODO: Handle multiple commands on websockets
         data["threshold"] = float(data["threshold"])
         session = self.sessionlocal()
         subs = list_subscriptions_from_connection(session, self.conn_id)
@@ -66,7 +66,9 @@ class WsHandler():
 
         # Check if received symbol is valid
         if data["symbol"].lower() not in Symbol.__dict__.values():
-            await self.websocket.send_text(json.dumps({"type": "error", "message": "symbol is not valid, check https://www.binance.com/api/v3/exchangeInfo to get the available symbols"}))
+            error_res = json.dumps({"type": "error", "message": "symbol is not valid, check https://www.binance.com/api/v3/exchangeInfo to get the available symbols"})
+            await self.websocket.send_text(error_res)
+            return error_res
 
         for sub in subs:
             if sub.price_threshold == data["threshold"] and sub.symbol == data["symbol"]:
