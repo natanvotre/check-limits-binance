@@ -336,6 +336,54 @@ class TestWsServerFunctionally:
             assert len(db_session.query(Subscription).all()) == 0
             assert json.loads(res)["type"] == "error"
 
+    def test_ws_server_notifications_shall_not_be_handled_by_a_different_subscription(self, db_session, caplog):
+        """
+            Test if WsServer throw error when trying to subscribe into an invalid symbol
+
+            Setup:
+            - Test database
+            - Mock WsServer simulating a run
+
+            Test:
+            - Connect to WsServer and see the Connection being created into the database
+            - Subscribe and see Subscriptions being created into the database
+        """
+        caplog.set_level(logging.DEBUG)
+        client = TestClient(app)
+
+        assert len(db_session.query(Connection).all()) == 0
+        with client.websocket_connect("/ws") as w1, client.websocket_connect("/ws") as w2:
+            w1.send_text(mock_subscription_message(symbol=Symbol.BTCUSDT, threshold=1000))
+            w1.receive_text()
+
+            w1_sub = db_session.query(Subscription).all()[0]
+
+            w2.send_text(mock_subscription_message(symbol=Symbol.ETHUSDT, threshold=2000))
+            w2.receive_text()
+
+            assert len(db_session.query(Subscription).all()) == 2
+            w2_sub = [s for s in db_session.query(Subscription).all() if s.symbol == Symbol.ETHUSDT][0]
+
+            n1 = Notification(
+                subscription_id=w1_sub.id,
+                symbol=w1_sub.symbol,
+                message="Mock message",
+                order_ref=random.randint(0, 1000000)
+            )
+            n2 = Notification(
+                subscription_id=w2_sub.id,
+                symbol=w2_sub.symbol,
+                message="Mock message 2",
+                order_ref=random.randint(0, 1000000)
+            )
+            db_session.add_all([n1, n2])
+            db_session.commit()
+
+            res = json.loads(w1.receive_text())
+            assert res["subscription_id"] == w1_sub.id
+            assert res["symbol"] == w1_sub.symbol
+            assert res["message"] == "Mock message"
+
 
 class TestMockE2EIngestionAndWsServer:
 
